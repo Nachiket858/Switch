@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Lenis from 'lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Pages
 import Home from './pages/Home';
@@ -24,10 +28,10 @@ import ScrollToTop from './components/ScrollToTop';
 const PageWrapper = ({ children }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
-      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      exit={{ opacity: 0, y: -18, filter: 'blur(6px)' }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.35, ease: 'easeInOut' }}
       className="flex-1 flex flex-col pt-24"
     >
       {children}
@@ -118,6 +122,10 @@ export default function App() {
       duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom out-quart ease
       smoothWheel: true,
+    });
+
+    lenis.on('scroll', () => {
+      ScrollTrigger.update();
     });
 
     function raf(time) {

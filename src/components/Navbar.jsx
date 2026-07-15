@@ -45,10 +45,16 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            className="group flex items-baseline gap-0.5 font-display text-2xl md:text-[1.7rem] font-semibold tracking-tight text-cocoa select-none"
+            className="flex items-center gap-2 select-none"
           >
-            S<span className="text-flame group-hover:rotate-12 inline-block transition-transform duration-300">'</span>wich
-            <span className="w-1.5 h-1.5 rounded-full bg-flame ml-1 self-center group-hover:scale-150 transition-transform duration-300" />
+            <img 
+              src="/assets/logo.png" 
+              alt="S'WICH" 
+              className={`h-7 md:h-8 w-auto object-contain transition-all duration-300 ${
+                location.pathname === '/' && !isScrolled ? '' : 'invert'
+              }`}
+              draggable="false"
+            />
           </Link>
 
           {/* Desktop Links */}
@@ -60,13 +66,19 @@ export default function Navbar() {
                   key={link.name}
                   to={link.path}
                   className={`relative px-4 py-2 font-display text-[0.8rem] font-medium uppercase tracking-[0.12em] rounded-full transition-colors duration-300 ${
-                    isActive ? 'text-paper' : 'text-cocoa/70 hover:text-cocoa'
+                    isActive
+                      ? 'text-paper'
+                      : location.pathname === '/' && !isScrolled
+                      ? 'text-cream/70 hover:text-cream'
+                      : 'text-cocoa/70 hover:text-cocoa'
                   }`}
                 >
                   {isActive && (
                     <motion.span
                       layoutId="activeNavPill"
-                      className="absolute inset-0 bg-cocoa rounded-full"
+                      className={`absolute inset-0 rounded-full ${
+                        location.pathname === '/' && !isScrolled ? 'bg-flame' : 'bg-cocoa'
+                      }`}
                       transition={{ type: 'spring', stiffness: 350, damping: 32 }}
                     />
                   )}
@@ -89,7 +101,11 @@ export default function Navbar() {
           {/* Mobile toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden relative z-50 w-11 h-11 flex flex-col items-center justify-center gap-[5px] rounded-full bg-cocoa text-paper cursor-pointer"
+            className={`md:hidden relative z-50 w-11 h-11 flex flex-col items-center justify-center gap-[5px] rounded-full cursor-pointer transition-colors duration-300 ${
+              location.pathname === '/' && !isScrolled && !isOpen
+                ? 'bg-cream/20 backdrop-blur-md text-cream'
+                : 'bg-cocoa text-paper'
+            }`}
             aria-label="Toggle Menu"
             aria-expanded={isOpen}
           >
