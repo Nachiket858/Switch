@@ -1,168 +1,115 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, SlidersHorizontal, Check, ShoppingBag, X } from 'lucide-react';
+import { X, ShoppingBag, Flame, Leaf, Drumstick } from 'lucide-react';
 import CardTilt from '../components/CardTilt';
+import Reveal from '../components/Reveal';
+import SplitText from '../components/SplitText';
 
-const categories = ['sandwiches', 'shakes', 'sides', 'beverages'];
+const categories = [
+  { id: 'sandwiches', label: "S'wiches", icon: 'fa-burger' },
+  { id: 'shakes', label: 'Thickshakes', icon: 'fa-ice-cream' },
+  { id: 'sides', label: 'Sides', icon: 'fa-utensils' },
+  { id: 'beverages', label: 'Coolers', icon: 'fa-martini-glass-citrus' },
+];
 
 const menuItems = [
-  // Sandwiches
   {
-    id: 0,
-    category: 'sandwiches',
-    name: 'Peri-Peri Paneer S\'wich',
+    id: 0, category: 'sandwiches', name: "Peri-Peri Paneer S'wich",
     desc: 'Spicy paneer chunks, fire-roasted bell peppers, shredded iceberg, and house peri-peri sauce.',
-    price: 249,
-    type: 'veg',
-    spicy: true,
-    img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=80',
+    price: 249, type: 'veg', spicy: true, badge: 'Best Seller',
+    img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=640&q=80',
   },
   {
-    id: 1,
-    category: 'sandwiches',
-    name: 'Peri-Peri Chicken S\'wich',
+    id: 1, category: 'sandwiches', name: "Peri-Peri Chicken S'wich",
     desc: 'Grilled tender chicken breast, spicy house rub, purple slaw, cheddar slice, and peri-peri drizzle.',
-    price: 289,
-    type: 'non-veg',
-    spicy: true,
-    img: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=400&q=80',
+    price: 289, type: 'non-veg', spicy: true, badge: 'Best Seller',
+    img: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=640&q=80',
   },
   {
-    id: 2,
-    category: 'sandwiches',
-    name: 'Classic Grilled Cheese',
-    desc: 'Artisanal sourdough bread, sharp cheddar, mozzarella blend, toasted in whipped herb butter.',
-    price: 189,
-    type: 'veg',
-    spicy: false,
-    img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=400&q=80',
+    id: 2, category: 'sandwiches', name: 'Classic Grilled Cheese',
+    desc: 'Artisanal sourdough, sharp cheddar, mozzarella blend, toasted in whipped herb butter.',
+    price: 189, type: 'veg', spicy: false,
+    img: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=640&q=80',
   },
   {
-    id: 3,
-    category: 'sandwiches',
-    name: 'Pesto Tomato Mozzarella',
-    desc: 'Fresh sliced buffalo mozzarella, vine tomatoes, basil pesto spread, and wild rocket greens.',
-    price: 229,
-    type: 'veg',
-    spicy: false,
-    img: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=400&q=80',
+    id: 3, category: 'sandwiches', name: 'Pesto Tomato Mozzarella',
+    desc: 'Buffalo mozzarella, vine tomatoes, basil pesto spread, and wild rocket greens.',
+    price: 229, type: 'veg', spicy: false,
+    img: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=640&q=80',
   },
   {
-    id: 4,
-    category: 'sandwiches',
-    name: 'Smoked Chicken & Bacon',
-    desc: 'Hickory-smoked pulled chicken, crispy smoked bacon bits, cheddar, and honey mustard sauce.',
-    price: 319,
-    type: 'non-veg',
-    spicy: false,
-    img: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=400&q=80',
+    id: 4, category: 'sandwiches', name: 'Smoked Chicken & Bacon',
+    desc: 'Hickory-smoked pulled chicken, crispy bacon bits, cheddar, and honey mustard sauce.',
+    price: 319, type: 'non-veg', spicy: false, badge: 'New',
+    img: 'https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=640&q=80',
   },
-  // Shakes
   {
-    id: 5,
-    category: 'shakes',
-    name: 'Nutella Banana Shake',
+    id: 5, category: 'shakes', name: 'Nutella Banana Shake',
     desc: 'Creamy banana base blended with real vanilla gelato, heavily swirled with raw Nutella.',
-    price: 199,
-    type: 'veg',
-    spicy: false,
-    img: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=400&q=80',
+    price: 199, type: 'veg', spicy: false, badge: 'Cult Fav',
+    img: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=640&q=80',
   },
   {
-    id: 6,
-    category: 'shakes',
-    name: 'Cold Coffee Thickshake',
-    desc: 'Double shot espresso blend, premium vanilla gelato, topped with dark chocolate shavings.',
-    price: 179,
-    type: 'veg',
-    spicy: false,
-    img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=400&q=80',
+    id: 6, category: 'shakes', name: 'Cold Coffee Thickshake',
+    desc: 'Double-shot espresso blend, premium vanilla gelato, topped with dark chocolate shavings.',
+    price: 179, type: 'veg', spicy: false,
+    img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=640&q=80',
   },
   {
-    id: 7,
-    category: 'shakes',
-    name: 'Strawberry Oreo Crush',
-    desc: 'Sweet Mahabaleshwar strawberries blended with crushed Oreos and topped with fresh whipped cream.',
-    price: 189,
-    type: 'veg',
-    spicy: false,
-    img: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=400&q=80',
+    id: 7, category: 'shakes', name: 'Strawberry Oreo Crush',
+    desc: 'Sweet Mahabaleshwar strawberries blended with crushed Oreos and fresh whipped cream.',
+    price: 189, type: 'veg', spicy: false,
+    img: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=640&q=80',
   },
   {
-    id: 8,
-    category: 'shakes',
-    name: 'Salted Caramel Crunch',
+    id: 8, category: 'shakes', name: 'Salted Caramel Crunch',
     desc: 'House-burnt butter caramel, butterscotch bits, vanilla bean cream, and a pinch of rock salt.',
-    price: 199,
-    type: 'veg',
-    spicy: false,
-    img: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=400&q=80',
-  },
-  // Sides
-  {
-    id: 9,
-    category: 'sides',
-    name: 'Loaded Peri Fries',
-    desc: 'Double-fried hand-cut potatoes dusted in spicy peri dust, drowned in warm cheddar cheese sauce.',
-    price: 149,
-    type: 'veg',
-    spicy: true,
-    img: 'https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=400&q=80',
+    price: 199, type: 'veg', spicy: false, badge: 'New',
+    img: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=640&q=80',
   },
   {
-    id: 10,
-    category: 'sides',
-    name: 'Crispy Dynamite Onion Rings',
-    desc: 'Thick-cut panko onion rings served with a side of spicy house dynamite sauce.',
-    price: 129,
-    type: 'veg',
-    spicy: true,
-    img: 'https://images.unsplash.com/photo-1518013006304-41470801f247?auto=format&fit=crop&w=400&q=80',
+    id: 9, category: 'sides', name: 'Loaded Peri Fries',
+    desc: 'Double-fried hand-cut potatoes dusted in peri spice, drowned in warm cheddar sauce.',
+    price: 149, type: 'veg', spicy: true, badge: 'Best Seller',
+    img: 'https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=640&q=80',
   },
   {
-    id: 11,
-    category: 'sides',
-    name: 'Hot Chicken Popcorn',
-    desc: 'Crunchy bite-sized chicken chunks tossed in spicy hot paprika powder, garlic dip.',
-    price: 179,
-    type: 'non-veg',
-    spicy: true,
-    img: 'https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=400&q=80',
-  },
-  // Beverages
-  {
-    id: 12,
-    category: 'beverages',
-    name: 'Mint Lime Mojito',
-    desc: 'Freshly muddled mint leaves, lime juice, sparkling club soda, and organic brown sugar syrup.',
-    price: 119,
-    type: 'veg',
-    spicy: false,
-    img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=400&q=80',
+    id: 10, category: 'sides', name: 'Dynamite Onion Rings',
+    desc: 'Thick-cut panko onion rings served with spicy house dynamite sauce.',
+    price: 129, type: 'veg', spicy: true,
+    img: 'https://images.unsplash.com/photo-1518013006304-41470801f247?auto=format&fit=crop&w=640&q=80',
   },
   {
-    id: 13,
-    category: 'beverages',
-    name: 'Cold Iced Peach Tea',
-    desc: 'Cold-brewed premium black tea blended with fresh peach nectar, lemon juice, mint garnishing.',
-    price: 99,
-    type: 'veg',
-    spicy: false,
-    img: 'https://images.unsplash.com/photo-1497515114629-f71d768fd07c?auto=format&fit=crop&w=400&q=80',
+    id: 11, category: 'sides', name: 'Hot Chicken Popcorn',
+    desc: 'Crunchy bite-sized chicken tossed in hot paprika, served with garlic dip.',
+    price: 179, type: 'non-veg', spicy: true,
+    img: 'https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=640&q=80',
+  },
+  {
+    id: 12, category: 'beverages', name: 'Mint Lime Mojito',
+    desc: 'Freshly muddled mint, lime juice, sparkling soda, and organic brown sugar syrup.',
+    price: 119, type: 'veg', spicy: false,
+    img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=640&q=80',
+  },
+  {
+    id: 13, category: 'beverages', name: 'Iced Peach Tea',
+    desc: 'Cold-brewed black tea blended with fresh peach nectar, lemon, and mint.',
+    price: 99, type: 'veg', spicy: false,
+    img: 'https://images.unsplash.com/photo-1497515114629-f71d768fd07c?auto=format&fit=crop&w=640&q=80',
   },
 ];
 
+const badgeStyles = {
+  'Best Seller': 'bg-flame text-paper',
+  'New': 'bg-pista text-cocoa',
+  'Cult Fav': 'bg-butter text-cocoa',
+};
+
 export default function Menu() {
   const [activeCat, setActiveCat] = useState('sandwiches');
-  const [dietFilter, setDietFilter] = useState('all'); // all, veg, non-veg
+  const [dietFilter, setDietFilter] = useState('all');
   const [customizingItem, setCustomizingItem] = useState(null);
-
-  // Customize Options
-  const [addons, setAddons] = useState({
-    cheese: false,
-    extraSpicy: false,
-    combo: false,
-  });
+  const [addons, setAddons] = useState({ cheese: false, extraSpicy: false, combo: false });
 
   const handleCustomizationOpen = (item) => {
     setCustomizingItem(item);
@@ -179,281 +126,266 @@ export default function Menu() {
   };
 
   const filteredItems = menuItems.filter(
-    (item) =>
-      item.category === activeCat &&
-      (dietFilter === 'all' || item.type === dietFilter)
+    (item) => item.category === activeCat && (dietFilter === 'all' || item.type === dietFilter)
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 py-8 flex-1">
-      {/* Page Title */}
-      <div className="text-center mb-10">
-        <span className="px-3 py-1 bg-brand-lime text-charcoal font-display text-xs font-bold uppercase tracking-widest rounded border border-charcoal inline-block mb-3 rotate-1">
-          Menu Craze
-        </span>
-        <h1 className="font-display text-4xl md:text-6xl font-black tracking-tight text-charcoal">
-          The S'wich Lineup
-        </h1>
-        <p className="text-charcoal/70 mt-3 font-medium">
-          Fresh buns, heavy cream, massive flavors. Customize ingredients to match your vibe.
-        </p>
-      </div>
+    <div className="flex-1 relative overflow-hidden">
+      {/* ambient glows */}
+      <div className="glow glow-butter w-[30rem] h-[30rem] -top-24 -right-24" />
+      <div className="glow glow-flame w-[26rem] h-[26rem] top-[40%] -left-32" />
 
-      {/* Categories Bar */}
-      <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 mb-8">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCat(cat)}
-            className={`px-6 py-3 font-display text-sm font-black uppercase tracking-wider rounded-full border-2 border-charcoal relative cursor-pointer ${
-              activeCat === cat
-                ? 'bg-brand-red text-cream shadow-[3px_3px_0px_0px_#1A1410]'
-                : 'bg-cream text-charcoal hover:bg-brand-lime transition-all duration-200'
-            }`}
-          >
-            {cat}
-            {activeCat === cat && (
-              <motion.span
-                layoutId="activeCategory"
-                className="absolute inset-0 rounded-full border-2 border-charcoal bg-transparent -z-10"
-                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-              />
-            )}
-          </button>
-        ))}
-      </div>
-
-      {/* Sub Filter: Diet */}
-      <div className="flex justify-center items-center gap-3 mb-12">
-        <SlidersHorizontal className="w-4 h-4 text-charcoal/50" />
-        <div className="flex border-2 border-charcoal bg-cream rounded-xl p-1 shadow-[2px_2px_0px_0px_#1A1410]">
-          {['all', 'veg', 'non-veg'].map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setDietFilter(filter)}
-              className={`px-4 py-1.5 font-display text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
-                dietFilter === filter
-                  ? 'bg-charcoal text-cream'
-                  : 'text-charcoal/70 hover:text-charcoal'
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
+      <div className="max-w-6xl mx-auto px-6 md:px-12 py-10 relative z-10">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <Reveal>
+            <span className="sticker bg-paper shadow-soft text-flame mb-5">Fresh out the kitchen</span>
+          </Reveal>
+          <h1 className="font-display font-semibold text-[clamp(2.8rem,7vw,5.5rem)] leading-[0.95] tracking-tight text-cocoa">
+            <SplitText text="The Lineup." stagger={0.03} />
+          </h1>
+          <Reveal delay={0.2}>
+            <p className="text-cocoa/60 mt-4 font-medium max-w-md mx-auto">
+              Fresh buns, heavy shakes, massive flavours.
+              <span className="hand-note text-flame text-xl ml-1.5">pick your fighter ↓</span>
+            </p>
+          </Reveal>
         </div>
-      </div>
 
-      {/* Menu Cards Grid */}
-      <motion.div
-        layout
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch"
-      >
-        <AnimatePresence mode="popLayout">
-          {filteredItems.map((item) => (
-            <motion.div
-              key={item.id}
-              layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-              className="flex"
-            >
-              <CardTilt className="w-full flex">
-                <div className="bg-cream border-2 border-charcoal rounded-2xl overflow-hidden shadow-[4px_4px_0px_0px_#1A1410] hover:shadow-[1px_1px_0px_0px_#1A1410] hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-200 flex flex-col justify-between w-full">
-                  
-                  {/* Card Image */}
-                  <div className="relative h-48 border-b-2 border-charcoal overflow-hidden group">
-                    <img
-                      src={item.img}
-                      alt={item.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+        {/* Category pills */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 mb-6">
+          {categories.map((cat) => {
+            const isActive = activeCat === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCat(cat.id)}
+                className={`relative px-6 py-3 font-display text-sm font-semibold tracking-wide rounded-full cursor-pointer transition-colors duration-300 ${
+                  isActive ? 'text-paper' : 'text-cocoa/70 bg-paper shadow-soft hover:text-cocoa hover:-translate-y-0.5'
+                }`}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="activeMenuCat"
+                    className="absolute inset-0 bg-cocoa rounded-full shadow-lift"
+                    transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-2">
+                  <i className={`fa-solid ${cat.icon} text-xs opacity-70`} /> {cat.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
 
-                    {/* Spicy / Diet tags */}
-                    <div className="absolute top-4 left-4 flex gap-2">
-                      <span
-                        className={`px-2 py-0.5 border border-charcoal rounded font-display text-[10px] font-black uppercase shadow-[1px_1px_0px_0px_#1A1410] ${
-                          item.type === 'veg'
-                            ? 'bg-[#E1FFEB] text-[#2E7D32]'
-                            : 'bg-[#FFEBEC] text-[#C62828]'
-                        }`}
-                      >
-                        {item.type}
-                      </span>
-                      {item.spicy && (
-                        <span className="px-2 py-0.5 bg-brand-red text-cream border border-charcoal rounded font-display text-[10px] font-black uppercase shadow-[1px_1px_0px_0px_#1A1410]">
-                          Spicy 🌶️
+        {/* Diet toggle */}
+        <div className="flex justify-center mb-14">
+          <div className="flex bg-paper rounded-full p-1.5 shadow-soft">
+            {[
+              { id: 'all', label: 'All' },
+              { id: 'veg', label: 'Veg', icon: <Leaf className="w-3.5 h-3.5" /> },
+              { id: 'non-veg', label: 'Non-Veg', icon: <Drumstick className="w-3.5 h-3.5" /> },
+            ].map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setDietFilter(f.id)}
+                className={`flex items-center gap-1.5 px-5 py-2 font-display text-xs font-semibold uppercase tracking-[0.1em] rounded-full transition-all cursor-pointer ${
+                  dietFilter === f.id
+                    ? f.id === 'veg'
+                      ? 'bg-pista text-cocoa'
+                      : f.id === 'non-veg'
+                        ? 'bg-flame text-paper'
+                        : 'bg-cocoa text-paper'
+                    : 'text-cocoa/50 hover:text-cocoa'
+                }`}
+              >
+                {f.icon}{f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Cards */}
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 items-stretch">
+          <AnimatePresence mode="popLayout">
+            {filteredItems.map((item) => (
+              <motion.div
+                key={item.id}
+                layout
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.92 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="flex"
+              >
+                <CardTilt className="w-full flex">
+                  <div className="card-soft group overflow-hidden flex flex-col w-full">
+                    {/* Image */}
+                    <div className="relative h-56 overflow-hidden">
+                      <img
+                        src={item.img}
+                        alt={item.name}
+                        loading="lazy"
+                        className="w-full h-full object-cover img-warm group-hover:scale-[1.07] transition-transform duration-700 ease-out"
+                      />
+                      <div className="absolute top-4 left-4 flex gap-2">
+                        <span
+                          className={`w-5 h-5 rounded-md border-2 flex items-center justify-center bg-paper ${
+                            item.type === 'veg' ? 'border-pista' : 'border-flame'
+                          }`}
+                          title={item.type}
+                        >
+                          <span className={`w-2 h-2 rounded-full ${item.type === 'veg' ? 'bg-pista' : 'bg-flame'}`} />
+                        </span>
+                        {item.spicy && (
+                          <span className="sticker !py-1 !px-2.5 bg-flame/90 text-paper !text-[0.58rem]">
+                            <Flame className="w-3 h-3" /> Spicy
+                          </span>
+                        )}
+                      </div>
+                      {item.badge && (
+                        <span className={`absolute top-4 right-4 sticker !py-1 !px-3 !text-[0.58rem] shadow-soft rotate-2 ${badgeStyles[item.badge]}`}>
+                          {item.badge}
                         </span>
                       )}
                     </div>
-                  </div>
 
-                  {/* Card Content */}
-                  <div className="p-6 flex flex-col flex-1 text-left justify-between">
-                    <div className="flex flex-col gap-2">
+                    {/* Content */}
+                    <div className="p-6 flex flex-col flex-1 gap-2">
                       <div className="flex justify-between items-start gap-4">
-                        <h3 className="font-display text-xl font-bold text-charcoal tracking-tight leading-tight">
+                        <h3 className="font-display text-lg font-semibold text-cocoa tracking-tight leading-tight group-hover:text-flame transition-colors duration-300">
                           {item.name}
                         </h3>
-                        <span className="font-display font-black text-lg text-brand-red shrink-0">
+                        <motion.span
+                          layout
+                          className="font-display font-semibold text-lg text-flame shrink-0"
+                        >
                           ₹{item.price}
-                        </span>
+                        </motion.span>
                       </div>
-                      <p className="text-charcoal/70 text-xs leading-relaxed font-sans mt-1">
-                        {item.desc}
-                      </p>
-                    </div>
+                      <p className="text-cocoa/55 text-[0.82rem] leading-relaxed">{item.desc}</p>
 
-                    <div className="flex gap-2.5 mt-6 pt-4 border-t border-charcoal/10">
-                      <button
-                        onClick={() => handleCustomizationOpen(item)}
-                        className="flex-1 py-2 bg-brand-lime text-charcoal border border-charcoal font-display text-xs font-bold uppercase tracking-wider rounded-lg shadow-[2px_2px_0px_0px_#1A1410] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer text-center"
-                      >
-                        Customize
-                      </button>
-                      <button
-                        onClick={() => handleCustomizationOpen(item)}
-                        className="p-2 bg-charcoal text-cream hover:bg-brand-red hover:text-charcoal transition-colors border border-charcoal rounded-lg cursor-pointer"
-                      >
-                        <ShoppingBag className="w-4 h-4" />
-                      </button>
+                      <div className="mt-auto pt-5">
+                        <button
+                          onClick={() => handleCustomizationOpen(item)}
+                          className="w-full py-3 bg-cream group-hover:bg-cocoa group-hover:text-paper font-display text-xs font-semibold uppercase tracking-[0.14em] rounded-full transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
+                        >
+                          <ShoppingBag className="w-3.5 h-3.5" />
+                          Customize & Order
+                        </button>
+                      </div>
                     </div>
                   </div>
+                </CardTilt>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
 
-                </div>
-              </CardTilt>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
+        {/* Empty state */}
+        {filteredItems.length === 0 && (
+          <div className="text-center py-16 card-soft mt-4">
+            <p className="font-display text-lg font-semibold text-cocoa/40">
+              Nothing matches this filter
+            </p>
+            <button
+              onClick={() => setDietFilter('all')}
+              className="btn-ghost mt-4 !py-2.5 !px-5 !text-[0.7rem]"
+            >
+              Reset filters
+            </button>
+          </div>
+        )}
+      </div>
 
-      {/* Empty State */}
-      {filteredItems.length === 0 && (
-        <div className="text-center py-12 border-2 border-dashed border-charcoal/20 rounded-2xl mt-8">
-          <p className="font-display text-lg font-bold text-charcoal/50 uppercase">
-            No items match this filter
-          </p>
-        </div>
-      )}
-
-      {/* Customizer Modal */}
+      {/* Customizer modal */}
       <AnimatePresence>
         {customizingItem && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.5 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setCustomizingItem(null)}
-              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm cursor-pointer"
+              className="fixed inset-0 z-50 bg-cocoa/50 backdrop-blur-sm cursor-pointer"
             />
-
-            {/* Modal */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.92, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="fixed inset-x-6 top-[15%] bottom-[15%] md:inset-auto md:w-[480px] md:top-[18%] md:left-[50%] md:-translate-x-1/2 z-50 bg-cream border-4 border-charcoal rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col justify-between"
+              exit={{ opacity: 0, scale: 0.92, y: 30 }}
+              transition={{ type: 'spring', damping: 24, stiffness: 260 }}
+              className="fixed inset-x-5 top-[10%] md:inset-auto md:w-[460px] md:top-[14%] md:left-1/2 md:-translate-x-1/2 z-50 bg-paper rounded-[2rem] p-7 md:p-8 shadow-lift flex flex-col gap-5 max-h-[80vh] overflow-y-auto"
             >
-              {/* Header */}
-              <div>
-                <div className="flex justify-between items-start pb-4 border-b border-charcoal/10">
-                  <div className="flex flex-col text-left">
-                    <span className="text-[10px] font-display font-black text-brand-red uppercase tracking-widest">
-                      Customize Stack
-                    </span>
-                    <h3 className="font-display text-2xl font-black text-charcoal mt-1 leading-tight">
-                      {customizingItem.name}
-                    </h3>
-                  </div>
-                  <button
-                    onClick={() => setCustomizingItem(null)}
-                    className="p-1 border border-charcoal rounded-full hover:bg-brand-lime transition-colors cursor-pointer"
-                  >
-                    <X className="w-4 h-4 text-charcoal" />
-                  </button>
-                </div>
-
-                {/* Options List */}
-                <div className="flex flex-col gap-4 py-6 text-left">
-                  {/* Cheese Option */}
-                  <label className="flex items-center justify-between p-3 border-2 border-charcoal rounded-xl cursor-pointer hover:bg-brand-lime/10 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        checked={addons.cheese}
-                        onChange={(e) => setAddons({ ...addons, cheese: e.target.checked })}
-                        className="w-4 h-4 accent-brand-red cursor-pointer"
-                      />
-                      <span className="font-display font-bold text-sm text-charcoal">
-                        Extra Cheddar Cheese
-                      </span>
-                    </div>
-                    <span className="font-display font-black text-xs text-brand-red">
-                      +₹49
-                    </span>
-                  </label>
-
-                  {/* Spicy Option */}
-                  <label className="flex items-center justify-between p-3 border-2 border-charcoal rounded-xl cursor-pointer hover:bg-brand-lime/10 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        checked={addons.extraSpicy}
-                        onChange={(e) => setAddons({ ...addons, extraSpicy: e.target.checked })}
-                        className="w-4 h-4 accent-brand-red cursor-pointer"
-                      />
-                      <span className="font-display font-bold text-sm text-charcoal">
-                        Extra Spicy Dynamite Drip
-                      </span>
-                    </div>
-                    <span className="font-display font-black text-xs text-brand-red">
-                      +₹19
-                    </span>
-                  </label>
-
-                  {/* Combo Option */}
-                  <label className="flex items-center justify-between p-3 border-2 border-charcoal rounded-xl cursor-pointer hover:bg-brand-lime/10 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        checked={addons.combo}
-                        onChange={(e) => setAddons({ ...addons, combo: e.target.checked })}
-                        className="w-4 h-4 accent-brand-red cursor-pointer"
-                      />
-                      <span className="font-display font-bold text-sm text-charcoal">
-                        Upgrade to Meal Combo
-                      </span>
-                    </div>
-                    <span className="font-display font-black text-xs text-brand-red">
-                      +₹129
-                    </span>
-                  </label>
-                  <p className="text-[10px] text-charcoal/50 leading-tight">
-                    *Meal combo includes dynamic Peri-Peri Waffle Fries + 250ml Mojito or Tea of choice.
-                  </p>
-                </div>
-              </div>
-
-              {/* Bottom Actions */}
-              <div className="border-t border-charcoal/10 pt-4 flex items-center justify-between">
+              <div className="flex justify-between items-start pb-4 border-b border-cocoa/8">
                 <div className="flex flex-col text-left">
-                  <span className="text-xs font-semibold text-charcoal/50">Total Price</span>
-                  <span className="font-display font-black text-2xl text-brand-red leading-none mt-1">
-                    ₹{calculateCustomPrice()}
+                  <span className="text-[0.65rem] font-display font-semibold text-flame uppercase tracking-[0.2em]">
+                    Make it yours
                   </span>
+                  <h3 className="font-display text-2xl font-semibold text-cocoa mt-1 leading-tight tracking-tight">
+                    {customizingItem.name}
+                  </h3>
                 </div>
                 <button
                   onClick={() => setCustomizingItem(null)}
-                  className="px-6 py-3 bg-brand-red text-cream border-2 border-charcoal font-display text-xs font-black uppercase tracking-wider rounded-xl shadow-[3px_3px_0px_0px_#1A1410] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all cursor-pointer flex items-center gap-2"
+                  className="w-9 h-9 flex items-center justify-center rounded-full bg-cream hover:bg-cocoa hover:text-paper transition-colors cursor-pointer shrink-0"
+                  aria-label="Close"
                 >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>Add To order</span>
+                  <X className="w-4 h-4" />
                 </button>
               </div>
 
+              <div className="flex flex-col gap-3 text-left">
+                {[
+                  { key: 'cheese', label: 'Extra Cheddar Melt', price: 49, icon: 'fa-cheese' },
+                  { key: 'extraSpicy', label: 'Extra Dynamite Drip', price: 19, icon: 'fa-pepper-hot' },
+                  { key: 'combo', label: 'Make it a Meal (fries + cooler)', price: 129, icon: 'fa-utensils' },
+                ].map((opt) => (
+                  <label
+                    key={opt.key}
+                    className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all duration-300 ${
+                      addons[opt.key] ? 'bg-flame/10 shadow-soft' : 'bg-cream hover:bg-blush/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={addons[opt.key]}
+                        onChange={(e) => setAddons({ ...addons, [opt.key]: e.target.checked })}
+                        className="w-4 h-4 accent-flame cursor-pointer"
+                      />
+                      <span className="font-display font-medium text-sm text-cocoa flex items-center gap-2">
+                        <i className={`fa-solid ${opt.icon} text-flame/70 text-xs`} /> {opt.label}
+                      </span>
+                    </div>
+                    <span className="font-display font-semibold text-xs text-flame">+₹{opt.price}</span>
+                  </label>
+                ))}
+              </div>
+
+              <div className="border-t border-cocoa/8 pt-5 flex items-center justify-between">
+                <div className="flex flex-col text-left">
+                  <span className="text-[0.65rem] font-semibold text-cocoa/45 uppercase tracking-[0.16em]">Total</span>
+                  <motion.span
+                    key={calculateCustomPrice()}
+                    initial={{ y: 8, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="font-display font-semibold text-3xl text-flame leading-none mt-1"
+                  >
+                    ₹{calculateCustomPrice()}
+                  </motion.span>
+                </div>
+                <a
+                  href={`https://wa.me/919999999999?text=${encodeURIComponent(
+                    `Hey S'wich! I'd like to order: ${customizingItem.name}${addons.cheese ? ' + extra cheese' : ''}${addons.extraSpicy ? ' + extra spicy' : ''}${addons.combo ? ' as a meal combo' : ''} (₹${calculateCustomPrice()})`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary !text-[0.72rem]"
+                >
+                  <ShoppingBag className="w-4 h-4" /> Order on WhatsApp
+                </a>
+              </div>
             </motion.div>
           </>
         )}

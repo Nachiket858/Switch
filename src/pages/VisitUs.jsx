@@ -1,139 +1,132 @@
-import { motion } from 'framer-motion';
-import { MapPin, Clock, Phone, Map, Navigation, CreditCard, Coffee, Sparkles } from 'lucide-react';
+import { MapPin, Clock, Phone, CreditCard, Coffee, Navigation } from 'lucide-react';
 import CardTilt from '../components/CardTilt';
+import Reveal from '../components/Reveal';
+import SplitText from '../components/SplitText';
+import MagneticButton from '../components/MagneticButton';
 
 export default function VisitUs() {
-  const address = "Gut No 20, Plot No 5, Paithan Road, Opposite Dhillon Residency, Kanchanwadi, Chhatrapati Sambhajinagar, Maharashtra 431011";
+  const address =
+    'Gut No 20, Plot No 5, Paithan Road, Opposite Dhillon Residency, Kanchanwadi, Chhatrapati Sambhajinagar, Maharashtra 431011';
 
   return (
-    <div className="max-w-7xl mx-auto px-6 md:px-12 py-8 flex-1">
-      {/* Page Title */}
-      <div className="text-center mb-12">
-        <motion.span
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="px-3 py-1 bg-brand-lime text-charcoal font-display text-xs font-bold uppercase tracking-widest rounded border border-charcoal inline-block mb-3 -rotate-1"
-        >
-          Locate Us
-        </motion.span>
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="font-display text-4xl md:text-6xl font-black tracking-tight text-charcoal"
-        >
-          Drop By & Say Hi!
-        </motion.h1>
-        <p className="text-charcoal/70 mt-3 font-medium">
-          Dine-in, take away, or get it delivered. We're waiting for you.
-        </p>
-      </div>
+    <div className="flex-1 relative overflow-hidden">
+      <div className="glow glow-blush w-[28rem] h-[28rem] -top-24 -left-28" />
+      <div className="glow glow-pista w-[26rem] h-[26rem] bottom-0 -right-28" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
-        {/* Info Column */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
-          className="lg:col-span-5 flex flex-col gap-6"
-        >
-          {/* Address Card */}
-          <div className="bg-cream border-2 border-charcoal p-6 rounded-2xl shadow-[4px_4px_0px_0px_#1A1410] flex flex-col gap-4 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-brand-red/5 rounded-full translate-x-8 -translate-y-8" />
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-brand-red text-cream rounded-xl border border-charcoal">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <h2 className="font-display text-xl font-bold text-charcoal leading-none">
-                Our Location
-              </h2>
-            </div>
-            <p className="text-charcoal/80 text-sm leading-relaxed font-sans">
-              {address}
+      <div className="max-w-6xl mx-auto px-6 md:px-12 py-10 relative z-10">
+        {/* Header */}
+        <div className="text-center mb-14">
+          <Reveal>
+            <span className="sticker bg-paper shadow-soft text-flame mb-5">Find the spot</span>
+          </Reveal>
+          <h1 className="font-display font-semibold text-[clamp(2.8rem,7vw,5.5rem)] leading-[0.95] tracking-tight text-cocoa">
+            <SplitText text="Pull Up," stagger={0.03} />{' '}
+            <span className="text-flame"><SplitText text="Say Hi." stagger={0.03} delay={0.15} /></span>
+          </h1>
+          <Reveal delay={0.25}>
+            <p className="text-cocoa/60 mt-4 font-medium">
+              Dine-in, takeaway, or delivery.
+              <span className="hand-note text-flame text-xl ml-1.5">the AC is always on</span>
             </p>
-            <div className="flex gap-3 mt-2">
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 py-3 bg-brand-lime text-charcoal font-display text-xs font-bold uppercase tracking-wider rounded-xl border border-charcoal text-center shadow-[2px_2px_0px_0px_#1A1410] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all cursor-pointer"
-              >
-                Get Directions
-              </a>
-              <a
-                href="tel:+919999999999"
-                className="px-4 py-3 bg-charcoal text-cream font-display text-xs font-bold uppercase rounded-xl border border-charcoal text-center flex items-center justify-center hover:bg-brand-red hover:text-charcoal transition-colors cursor-pointer"
-              >
-                <Phone className="w-4 h-4" />
-              </a>
+          </Reveal>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          {/* Info column */}
+          <div className="lg:col-span-5 flex flex-col gap-6">
+            <Reveal direction="right">
+              <div className="card-soft p-7 flex flex-col gap-4 relative overflow-hidden">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 bg-flame text-paper rounded-2xl flex items-center justify-center shadow-glow">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <h2 className="font-display text-xl font-semibold text-cocoa tracking-tight">
+                    Our Location
+                  </h2>
+                </div>
+                <p className="text-cocoa/60 text-sm leading-relaxed">{address}</p>
+                <div className="flex gap-3 mt-1">
+                  <MagneticButton className="flex-1" strength={0.2}>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-primary w-full !py-3.5 !text-[0.7rem]"
+                    >
+                      <Navigation className="w-3.5 h-3.5" /> Get Directions
+                    </a>
+                  </MagneticButton>
+                  <a
+                    href="tel:+919999999999"
+                    aria-label="Call S'wich"
+                    className="w-12 h-12 self-center flex items-center justify-center rounded-full bg-cocoa text-paper hover:bg-flame transition-colors cursor-pointer"
+                  >
+                    <Phone className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal direction="right" delay={0.1}>
+              <div className="card-soft p-7 flex flex-col gap-4">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-12 h-12 bg-butter text-cocoa rounded-2xl flex items-center justify-center">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <h2 className="font-display text-xl font-semibold text-cocoa tracking-tight">
+                    Opening Hours
+                  </h2>
+                </div>
+                <div className="flex justify-between items-center font-display font-medium text-sm text-cocoa border-b border-cocoa/8 pb-3">
+                  <span>Monday – Sunday</span>
+                  <span className="text-flame font-semibold">11:00 AM – 11:00 PM</span>
+                </div>
+                <span className="text-xs text-cocoa/45 leading-relaxed">
+                  Open daily, including holidays. Last order at 10:45 PM.
+                  <span className="hand-note text-base text-flame ml-1">late-night cravings covered</span>
+                </span>
+              </div>
+            </Reveal>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Reveal direction="up" delay={0.15}>
+                <div className="card-soft p-6 flex flex-col items-center text-center gap-2">
+                  <Coffee className="w-6 h-6 text-flame" />
+                  <span className="font-display text-sm font-semibold text-cocoa">Indoor Seating</span>
+                  <span className="text-[0.68rem] text-cocoa/45">Chill AC & good playlists</span>
+                </div>
+              </Reveal>
+              <Reveal direction="up" delay={0.2}>
+                <div className="card-soft p-6 flex flex-col items-center text-center gap-2">
+                  <CreditCard className="w-6 h-6 text-flame" />
+                  <span className="font-display text-sm font-semibold text-cocoa">Digital Payments</span>
+                  <span className="text-[0.68rem] text-cocoa/45">UPI, cards, wallets</span>
+                </div>
+              </Reveal>
             </div>
           </div>
 
-          {/* Hours Card */}
-          <div className="bg-cream border-2 border-charcoal p-6 rounded-2xl shadow-[4px_4px_0px_0px_#1A1410] flex flex-col gap-3 relative overflow-hidden">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-brand-lime text-charcoal rounded-xl border border-charcoal">
-                <Clock className="w-5 h-5" />
+          {/* Map column */}
+          <Reveal direction="left" delay={0.1} className="lg:col-span-7 flex">
+            <CardTilt className="w-full flex" max={3}>
+              <div className="w-full rounded-[2rem] shadow-lift relative overflow-hidden flex min-h-[380px] lg:min-h-full">
+                <span className="absolute top-5 left-5 sticker bg-paper shadow-soft text-cocoa z-10 -rotate-2">
+                  <i className="fa-solid fa-location-dot text-flame" /> We're right here
+                </span>
+                <span className="absolute bottom-5 right-5 sticker bg-flame text-paper shadow-glow z-10 rotate-2">
+                  <i className="fa-solid fa-star text-butter" /> 4.8 rated
+                </span>
+                <iframe
+                  title="S'wich Store Map Location"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3753.864332906803!2d75.30159497582772!3d19.81395982823871!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdb997bf6abf945%3A0x6b8bc2eb816999a4!2sPaithan%20Rd%2C%20Kanchanwadi%2C%20Chhatrapati%20Sambhajinagar%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1721000000000!5m2!1sen!2sin"
+                  className="w-full h-full min-h-[380px] lg:min-h-full border-none"
+                  allowFullScreen=""
+                  loading="lazy"
+                />
               </div>
-              <h2 className="font-display text-xl font-bold text-charcoal leading-none">
-                Operating Hours
-              </h2>
-            </div>
-            <div className="flex flex-col gap-1.5 mt-2 font-display text-sm font-bold text-charcoal">
-              <div className="flex justify-between border-b border-charcoal/10 pb-2">
-                <span>Monday - Sunday</span>
-                <span className="text-brand-red">11:00 AM - 11:00 PM</span>
-              </div>
-              <span className="text-xs font-sans font-medium text-charcoal/60 mt-1">
-                *Open daily, including holidays. Last order taken at 10:45 PM.
-              </span>
-            </div>
-          </div>
-
-          {/* Vibe Badges */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 border-2 border-charcoal rounded-2xl flex flex-col items-center justify-center text-center gap-2 bg-brand-lime/10">
-              <Coffee className="w-6 h-6 text-brand-red" />
-              <span className="font-display text-sm font-bold text-charcoal">Indoor Seating</span>
-              <span className="text-[10px] text-charcoal/60">Chill AC & cool beats</span>
-            </div>
-            <div className="p-4 border-2 border-charcoal rounded-2xl flex flex-col items-center justify-center text-center gap-2 bg-brand-red/10">
-              <CreditCard className="w-6 h-6 text-brand-red" />
-              <span className="font-display text-sm font-bold text-charcoal">Digital Payments</span>
-              <span className="text-[10px] text-charcoal/60">UPI, Cards, Wallets</span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Map Column */}
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-          className="lg:col-span-7 flex"
-        >
-          <CardTilt className="w-full flex">
-            <div className="w-full bg-charcoal border-4 border-charcoal rounded-3xl shadow-[8px_8px_0px_0px_#1A1410] relative overflow-hidden flex min-h-[350px] lg:min-h-full">
-              {/* Map Sticker */}
-              <div className="absolute top-4 left-4 bg-brand-lime text-charcoal border-2 border-charcoal font-display text-xs font-black uppercase tracking-wider py-1.5 px-3 z-10 -rotate-3 shadow-[2px_2px_0px_0px_#1A1410]">
-                We are here! 📍
-              </div>
-
-              {/* Rating Sticker */}
-              <div className="absolute bottom-4 right-4 bg-brand-red text-cream border-2 border-charcoal font-display text-xs font-black uppercase tracking-wider py-1.5 px-3 z-10 rotate-6 shadow-[2px_2px_0px_0px_#1A1410]">
-                ⭐ 4.8 / 5 Rating
-              </div>
-
-              {/* Embedded Iframe */}
-              <iframe
-                title="S'wich Store Map Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3753.864332906803!2d75.30159497582772!3d19.81395982823871!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdb997bf6abf945%3A0x6b8bc2eb816999a4!2sPaithan%20Rd%2C%20Kanchanwadi%2C%20Chhatrapati%20Sambhajinagar%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1721000000000!5m2!1sen!2sin"
-                className="w-full h-full min-h-[350px] lg:min-h-full border-none grayscale contrast-125 focus:outline-none"
-                allowFullScreen=""
-                loading="lazy"
-              />
-            </div>
-          </CardTilt>
-        </motion.div>
+            </CardTilt>
+          </Reveal>
+        </div>
       </div>
     </div>
   );

@@ -24,11 +24,11 @@ import ScrollToTop from './components/ScrollToTop';
 const PageWrapper = ({ children }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -15 }}
-      transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
-      className="flex-1 flex flex-col pt-20"
+      initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      exit={{ opacity: 0, y: -18, filter: 'blur(6px)' }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className="flex-1 flex flex-col pt-24"
     >
       {children}
     </motion.div>
@@ -143,7 +143,7 @@ export default function App() {
 
       {/* Main Content */}
       {loaderComplete && (
-        <div className="flex flex-col min-h-screen bg-cream selection:bg-brand-lime selection:text-charcoal relative">
+        <div className="grain flex flex-col min-h-screen bg-cream relative">
           <CustomCursor />
           <Navbar />
           <AnimatedRoutes />

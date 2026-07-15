@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import MagneticButton from './MagneticButton';
 
 const navLinks = [
   { name: 'Home', path: '/' },
   { name: 'Menu', path: '/menu' },
   { name: 'Our Story', path: '/story' },
-  { name: 'Visit Us', path: '/visit' },
   { name: 'Gallery', path: '/gallery' },
+  { name: 'Visit Us', path: '/visit' },
   { name: 'Contact', path: '/contact' },
 ];
 
@@ -17,153 +18,132 @@ export default function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile nav on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
 
-  // Hamburger Custom SVG Path helper
-  const Path = (props) => (
-    <motion.path
-      fill="transparent"
-      strokeWidth="3"
-      stroke="currentColor"
-      strokeLinecap="round"
-      {...props}
-    />
-  );
-
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-          isScrolled
-            ? 'py-3 bg-cream/80 backdrop-blur-xl border-b border-charcoal/15 shadow-sm'
-            : 'py-6 bg-transparent'
-        }`}
+      <motion.nav
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+        className="fixed top-0 left-0 w-full z-50 px-4 md:px-8 pt-4"
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+        <div
+          className={`max-w-6xl mx-auto flex justify-between items-center rounded-full px-5 md:px-7 transition-all duration-500 ${
+            isScrolled
+              ? 'glass py-2.5 shadow-[0_8px_32px_-12px_rgba(34,21,11,0.25)] border border-cocoa/5'
+              : 'py-3.5 bg-transparent'
+          }`}
+        >
           {/* Logo */}
           <Link
             to="/"
-            className="group flex items-center gap-1.5 font-display text-3xl font-black tracking-tighter text-charcoal select-none cursor-pointer"
+            className="group flex items-baseline gap-0.5 font-display text-2xl md:text-[1.7rem] font-semibold tracking-tight text-cocoa select-none"
           >
-            <span className="group-hover:text-brand-red transition-colors duration-200">S'wich</span>
-            <span className="w-2.5 h-2.5 rounded-full bg-brand-red group-hover:bg-brand-lime transition-colors duration-200"></span>
+            S<span className="text-flame group-hover:rotate-12 inline-block transition-transform duration-300">'</span>wich
+            <span className="w-1.5 h-1.5 rounded-full bg-flame ml-1 self-center group-hover:scale-150 transition-transform duration-300" />
           </Link>
 
-          {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Desktop Links */}
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link
                   key={link.name}
                   to={link.path}
-                  className="relative group font-display text-sm font-semibold uppercase tracking-wider text-charcoal py-1 cursor-pointer"
+                  className={`relative px-4 py-2 font-display text-[0.8rem] font-medium uppercase tracking-[0.12em] rounded-full transition-colors duration-300 ${
+                    isActive ? 'text-paper' : 'text-cocoa/70 hover:text-cocoa'
+                  }`}
                 >
-                  <span className="relative z-10 group-hover:text-brand-red transition-colors duration-200">
-                    {link.name}
-                  </span>
                   {isActive && (
                     <motion.span
-                      layoutId="activeNavIndicator"
-                      className="absolute bottom-0 left-0 w-full h-0.5 bg-brand-red"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      layoutId="activeNavPill"
+                      className="absolute inset-0 bg-cocoa rounded-full"
+                      transition={{ type: 'spring', stiffness: 350, damping: 32 }}
                     />
                   )}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-lime group-hover:w-full transition-all duration-300" />
+                  <span className="relative z-10">{link.name}</span>
                 </Link>
               );
             })}
+          </div>
 
-            {/* Desktop Order Now Header CTA */}
+          {/* Desktop CTA */}
+          <MagneticButton className="hidden md:inline-block" strength={0.25}>
             <Link
               to="/menu"
-              className="px-5 py-2 bg-brand-red text-cream font-display text-xs font-bold uppercase tracking-widest rounded-full border-2 border-charcoal shadow-[3px_3px_0px_0px_#1A1410] hover:shadow-[0px_0px_0px_0px_#1A1410] hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-150 cursor-pointer"
+              className="btn-primary !py-2.5 !px-6 !text-[0.72rem]"
             >
               Order Now
             </Link>
-          </div>
+          </MagneticButton>
 
-          {/* Mobile Hamburguer Toggle */}
+          {/* Mobile toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden flex items-center justify-center p-2 rounded-full border-2 border-charcoal bg-cream text-charcoal hover:bg-brand-lime transition-all duration-200 focus:outline-none z-50 cursor-pointer"
+            className="md:hidden relative z-50 w-11 h-11 flex flex-col items-center justify-center gap-[5px] rounded-full bg-cocoa text-paper cursor-pointer"
             aria-label="Toggle Menu"
+            aria-expanded={isOpen}
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" className="w-5 h-5">
-              <Path
-                variants={{
-                  closed: { d: 'M 2 4.5 L 18 4.5' },
-                  open: { d: 'M 4 16 L 16 4' },
-                }}
-                animate={isOpen ? 'open' : 'closed'}
-              />
-              <Path
-                d="M 2 9.5 L 18 9.5"
-                variants={{
-                  closed: { opacity: 1 },
-                  open: { opacity: 0 },
-                }}
-                transition={{ duration: 0.15 }}
-                animate={isOpen ? 'open' : 'closed'}
-              />
-              <Path
-                variants={{
-                  closed: { d: 'M 2 14.5 L 18 14.5' },
-                  open: { d: 'M 4 4 L 16 16' },
-                }}
-                animate={isOpen ? 'open' : 'closed'}
-              />
-            </svg>
+            <motion.span
+              animate={isOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
+              className="w-5 h-[2px] bg-current rounded-full"
+            />
+            <motion.span
+              animate={isOpen ? { opacity: 0, x: 8 } : { opacity: 1, x: 0 }}
+              className="w-5 h-[2px] bg-current rounded-full"
+            />
+            <motion.span
+              animate={isOpen ? { rotate: -45, y: -9 } : { rotate: 0, y: 0 }}
+              className="w-5 h-[2px] bg-current rounded-full"
+            />
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
-      {/* Mobile Navigation Full-screen Overlay Menu */}
+      {/* Mobile full-screen menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: '-100%' }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: '-100%' }}
-            transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 z-40 bg-charcoal text-cream flex flex-col justify-between p-8 pt-28 overflow-hidden md:hidden"
+            initial={{ clipPath: 'circle(0% at calc(100% - 52px) 44px)' }}
+            animate={{ clipPath: 'circle(150% at calc(100% - 52px) 44px)' }}
+            exit={{ clipPath: 'circle(0% at calc(100% - 52px) 44px)' }}
+            transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-40 bg-cocoa text-cream flex flex-col justify-between px-8 pt-28 pb-10 md:hidden"
           >
-            {/* Background design elements / stickers */}
-            <div className="absolute right-[-40px] bottom-[15%] text-[14rem] font-display font-black text-brand-red/10 leading-none select-none pointer-events-none -rotate-12">
+            {/* Giant ghost word */}
+            <div
+              aria-hidden="true"
+              className="absolute -right-8 bottom-24 font-display font-bold text-[10rem] leading-none text-paper/[0.04] select-none pointer-events-none -rotate-90 origin-bottom-right"
+            >
               S'WICH
             </div>
-            
-            <div className="flex flex-col gap-6 font-display">
+
+            <div className="flex flex-col gap-2">
               {navLinks.map((link, idx) => {
                 const isActive = location.pathname === link.path;
                 return (
                   <motion.div
                     key={link.name}
-                    initial={{ x: -50, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: idx * 0.08 + 0.1, duration: 0.4 }}
+                    initial={{ y: 40, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.25 + idx * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <Link
                       to={link.path}
-                      className={`text-4xl font-extrabold uppercase tracking-tight flex items-center gap-4 group cursor-pointer ${
-                        isActive ? 'text-brand-lime' : 'text-cream hover:text-brand-red'
+                      className={`font-display text-[2.6rem] font-semibold tracking-tight leading-[1.15] flex items-baseline gap-3 ${
+                        isActive ? 'text-flame' : 'text-cream'
                       }`}
                     >
-                      <span className="text-sm font-sans font-medium text-brand-red/60">0{idx + 1}.</span>
+                      <span className="hand-note text-lg text-butter/70">0{idx + 1}</span>
                       {link.name}
                     </Link>
                   </motion.div>
@@ -174,25 +154,30 @@ export default function Navbar() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.4 }}
-              className="border-t border-cream/15 pt-6 flex flex-col gap-4"
+              transition={{ delay: 0.6, duration: 0.4 }}
+              className="border-t border-cream/10 pt-6 flex flex-col gap-4"
             >
-              <p className="text-xs uppercase tracking-widest text-cream/60 font-sans">
-                Gut No 20, Paithan Road, Chhatrapati Sambhajinagar
+              <a
+                href="https://www.instagram.com/swich.ixu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hand-note text-2xl text-butter"
+              >
+                @swich.ixu ↗
+              </a>
+              <p className="text-xs uppercase tracking-[0.2em] text-cream/40 font-medium">
+                Paithan Road · Chhatrapati Sambhajinagar
               </p>
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 <a
-                  href="https://wa.me/919999999999"
+                  href="https://wa.me/919999999999?text=Hey%20S'wich!%20I'd%20love%20to%20place%20an%20order."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 bg-brand-lime text-charcoal font-display text-xs font-bold uppercase tracking-wider rounded-lg text-center"
+                  className="btn-primary flex-1 !py-3.5"
                 >
                   WhatsApp Order
                 </a>
-                <Link
-                  to="/menu"
-                  className="px-4 py-2 bg-brand-red text-cream font-display text-xs font-bold uppercase tracking-wider rounded-lg text-center border border-cream/20"
-                >
+                <Link to="/menu" className="btn-ghost flex-1 !py-3.5 !text-cream !border-cream/30">
                   View Menu
                 </Link>
               </div>

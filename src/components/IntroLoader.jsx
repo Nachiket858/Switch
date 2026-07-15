@@ -11,9 +11,7 @@ export default function IntroLoader({ onComplete }) {
       onComplete();
       setHasLoaded(true);
     } else {
-      const timer = setTimeout(() => {
-        handleComplete();
-      }, 2200);
+      const timer = setTimeout(() => handleComplete(), 2100);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -21,36 +19,10 @@ export default function IntroLoader({ onComplete }) {
   const handleComplete = () => {
     sessionStorage.setItem('swich_loader_seen', 'true');
     setIsFinished(true);
-    setTimeout(() => {
-      onComplete();
-    }, 600); // Matches exit transition duration
+    setTimeout(() => onComplete(), 700);
   };
 
   if (hasLoaded) return null;
-
-  const containerVariants = {
-    exit: {
-      y: '-100vh',
-      transition: {
-        duration: 0.6,
-        ease: [0.76, 0, 0.24, 1], // Custom snappy slide-up
-      }
-    }
-  };
-
-  const letterVariants = {
-    initial: { y: 150, rotate: 15, opacity: 0 },
-    animate: (i) => ({
-      y: 0,
-      rotate: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.175, 0.885, 0.32, 1.275], // Snappy overshoot bounce
-        delay: i * 0.08,
-      }
-    })
-  };
 
   const word = ['S', "'", 'w', 'i', 'c', 'h'];
 
@@ -58,30 +30,34 @@ export default function IntroLoader({ onComplete }) {
     <AnimatePresence>
       {!isFinished && (
         <motion.div
-          variants={containerVariants}
-          initial="initial"
-          exit="exit"
-          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-charcoal text-cream overflow-hidden"
+          exit={{ y: '-100%', borderBottomLeftRadius: '50% 12%', borderBottomRightRadius: '50% 12%' }}
+          transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-cocoa text-cream overflow-hidden"
         >
-          {/* Skip Button */}
+          {/* Soft gradient glow */}
+          <div className="absolute w-[60vw] h-[60vw] rounded-full bg-flame/15 blur-[120px] pointer-events-none" />
+
           <button
             onClick={handleComplete}
-            className="absolute top-8 right-8 px-5 py-2 border-2 border-brand-red rounded-full text-xs font-display tracking-widest text-brand-lime uppercase transition-all duration-300 hover:bg-brand-red hover:text-charcoal active:scale-95 z-50 cursor-pointer"
+            className="absolute top-8 right-8 px-5 py-2 rounded-full border border-cream/20 text-[0.65rem] font-display font-medium tracking-[0.2em] text-cream/70 uppercase hover:bg-cream hover:text-cocoa transition-all duration-300 cursor-pointer z-10"
           >
-            Skip Intro →
+            Skip →
           </button>
 
-          {/* Letter Cluster */}
-          <div className="flex select-none overflow-hidden py-4 items-center justify-center">
+          {/* Letters */}
+          <div className="flex items-baseline overflow-hidden py-4 select-none">
             {word.map((char, index) => (
               <motion.span
                 key={index}
-                custom={index}
-                variants={letterVariants}
-                initial="initial"
-                animate="animate"
-                className={`text-6xl md:text-9xl font-display font-black inline-block leading-none ${
-                  char === "'" ? 'text-brand-lime' : index % 2 === 0 ? 'text-brand-red' : 'text-cream'
+                initial={{ y: 140, opacity: 0, rotate: 8 }}
+                animate={{ y: 0, opacity: 1, rotate: 0 }}
+                transition={{
+                  duration: 0.65,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: 0.15 + index * 0.07,
+                }}
+                className={`text-7xl md:text-[9rem] font-display font-semibold tracking-tight inline-block leading-none ${
+                  char === "'" ? 'text-flame' : 'text-cream'
                 }`}
               >
                 {char}
@@ -89,15 +65,22 @@ export default function IntroLoader({ onComplete }) {
             ))}
           </div>
 
-          {/* Brand Manifesto Sticker */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
-            animate={{ opacity: 1, scale: 1, rotate: -4 }}
-            transition={{ delay: 0.8, duration: 0.4 }}
-            className="mt-6 px-4 py-2 bg-brand-lime text-charcoal font-display text-xs font-bold uppercase tracking-wider rounded border-2 border-charcoal shadow-[4px_4px_0px_0px_#FF4D2E]"
+          <motion.span
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.5 }}
+            className="hand-note text-2xl md:text-3xl text-butter rotate-[-2deg]"
           >
-            One S'wich, Zero Regrets
-          </motion.div>
+            one s'wich, zero regrets
+          </motion.span>
+
+          {/* Progress line */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.8, ease: 'easeInOut' }}
+            className="absolute bottom-16 w-40 h-[2px] bg-flame origin-left rounded-full"
+          />
         </motion.div>
       )}
     </AnimatePresence>
